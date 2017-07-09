@@ -1,0 +1,20 @@
+server:  
+  port: ${PORT:2222}
+
+spring:  
+  application:
+    name: graphite-service
+  metrics:
+    export:
+      delay-millis: 5000
+      includes: heap.used,mem,mem.free,threads 
+
+logging:
+  level:
+    org.influxdb: DEBUG
+    org.springframework.boot.actuate: DEBUG
+    
+org.hibernate: WARN
+management:
+  security:
+    enabled: false
