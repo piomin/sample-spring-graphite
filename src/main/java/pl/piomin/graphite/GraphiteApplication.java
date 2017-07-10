@@ -6,7 +6,6 @@ import java.util.logging.Logger;
 import org.influxdb.InfluxDB;
 import org.influxdb.InfluxDBFactory;
 import org.influxdb.dto.Point;
-import org.influxdb.dto.Query;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.actuate.autoconfigure.ExportMetricWriter;
 import org.springframework.boot.actuate.endpoint.MetricsEndpoint;
@@ -24,18 +23,7 @@ public class GraphiteApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(GraphiteApplication.class, args);
 	}
-
-//	@Bean
-//	public MetricRegistry metricRegistry() {
-//		final MetricRegistry metricRegistry = new MetricRegistry();
-//
-//		metricRegistry.register("jvm.memory", new MemoryUsageGaugeSet());
-//		metricRegistry.register("jvm.thread-states", new ThreadStatesGaugeSet());
-//		metricRegistry.register("jvm.garbage-collector", new GarbageCollectorMetricSet());
-//
-//		return metricRegistry;
-//	}
-
+	
 	@Bean
 	public MetricsEndpointMetricReader metricsEndpointMetricReader(final MetricsEndpoint metricsEndpoint) {
 		return new MetricsEndpointMetricReader(metricsEndpoint);
@@ -54,16 +42,10 @@ public class GraphiteApplication {
 
 			@Override
 			public void set(Metric<?> value) {
-//				String n = "testx2";
-//				if (value.getName().startsWith("gauge"))
-//					n = "testx1";
 				Point point = Point.measurement(value.getName()).time(value.getTimestamp().getTime(), TimeUnit.MILLISECONDS)
 						.addField("value", value.getValue()).build();
 				influxDB.write(point);
 				logger.info("write(" + value.getName() + "): " + value.getValue());
-				// influxDB.flush();
-//				int size = influxDB.query(new Query("SELECT value FROM " + n, dbName)).getResults().size();
-				// logger.info("size: " + size);
 			}
 		};
 	}

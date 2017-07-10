@@ -4,17 +4,22 @@ server:
 spring:  
   application:
     name: graphite-service
+  datasource:
+    url: jdbc:mysql://192.168.99.100:33306/datagrid?useSSL=false
+    username: datagrid
+    password: datagrid
+    driver-class-name: com.mysql.jdbc.Driver
+    name: example
+    maxActive: 10
   metrics:
     export:
       delay-millis: 5000
-      includes: heap.used,mem,mem.free,threads 
+      includes: heap.used,heap.committed,mem,mem.free,threads,datasource.primary.active,datasource.primary.usage,gauge.response.persons,gauge.response.persons.id,gauge.response.persons.remove
 
 logging:
   level:
     org.influxdb: DEBUG
-    org.springframework.boot.actuate: DEBUG
     
-org.hibernate: WARN
 management:
   security:
-    enabled: false
+    enabled: false   
