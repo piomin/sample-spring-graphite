@@ -14,7 +14,7 @@ spring:
   metrics:
     export:
       delay-millis: 5000
-      includes: heap.used,heap.committed,mem,mem.free,threads,datasource.primary.active,datasource.primary.usage,gauge.response.persons,gauge.response.persons.id,gauge.response.persons.remove
+      includes: heap.used,heap.committed,mem,mem.free,threads,datasource.primary.active,datasource.primary.usage,gauge.response.persons,gauge.response.persons.id,gauge.response.persons.remove,gauge.firstservice
 
 logging:
   level:
