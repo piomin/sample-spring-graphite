@@ -1,5 +1,5 @@
-## Exposing microservices on REST Protocol Buffers
+## Custom metrics visualization with Grafana and InfluxDB
 
-Detailed description can be found here: [Exposing Microservices over REST Protocol Buffers](https://piotrminkowski.wordpress.com/2017/06/05/exposing-microservices-over-rest-protocol-buffers/) 
+Detailed description can be found here: [Custom metrics visualization with Grafana and InfluxDB](https://piotrminkowski.wordpress.com/2017/07/13/custom-metrics-visualization-with-grafana-and-influxdb/) 
 
 
