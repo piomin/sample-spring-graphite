@@ -12,10 +12,12 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import io.micrometer.core.annotation.Timed;
 import pl.piomin.graphite.service.data.PersonRepository;
 import pl.piomin.graphite.service.model.Person;
 
 @RestController
+@Timed
 public class PersonController {
 
 	protected Logger logger = Logger.getLogger(PersonController.class.getName());
@@ -32,16 +34,18 @@ public class PersonController {
 	@GetMapping("/persons/{id}")
 	public Person findById(@PathVariable("id") Integer id) {
 		logger.info(String.format("Person.findById(%d)", id));
-		return repository.findOne(id);
+		return repository.findById(id).get();
 	}
 	
 	@GetMapping("/persons")
+	@Timed(histogram = true, extraTags = {"get"})
 	public List<Person> findAll() {
 		logger.info(String.format("Person.findAll()"));
 		return (List<Person>) repository.findAll();
 	}
 	
 	@PostMapping("/persons")
+	@Timed(histogram = true, extraTags = {"add"})
 	public Person add(@RequestBody Person person) {
 		logger.info(String.format("Person.add(%s)", person));
 		return repository.save(person);
@@ -56,7 +60,7 @@ public class PersonController {
 	@DeleteMapping("/persons/remove/{id}")
 	public void remove(@PathVariable("id") Integer id) {
 		logger.info(String.format("Person.remove(%d)", id));
-		repository.delete(id);
+		repository.deleteById(id);
 	}
 	
 }

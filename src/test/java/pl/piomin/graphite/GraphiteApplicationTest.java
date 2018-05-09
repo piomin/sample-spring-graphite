@@ -18,12 +18,12 @@ public class GraphiteApplicationTest {
 	
 	@Test
 	public void testRest() {
-		for (int i = 0; i < 100; i++) {
+		for (int i = 0; i < 5; i++) {
 			new Thread(new Runnable() {
 				
 				@Override
 				public void run() {
-					for (int j = 0; j < 100; j++) {
+					for (int j = 0; j < 5; j++) {
 						try {
 							int ix = new Random().nextInt(100000);
 							Person p = new Person();

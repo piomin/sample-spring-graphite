@@ -5,21 +5,25 @@ spring:
   application:
     name: graphite-service
   datasource:
-    url: jdbc:mysql://192.168.99.100:33306/datagrid?useSSL=false
-    username: datagrid
-    password: datagrid
-    driver-class-name: com.mysql.jdbc.Driver
-    name: example
-    maxActive: 10
-  metrics:
-    export:
-      delay-millis: 5000
-      includes: heap.used,heap.committed,mem,mem.free,threads,datasource.primary.active,datasource.primary.usage,gauge.response.persons,gauge.response.persons.id,gauge.response.persons.remove,gauge.firstservice
+    url: jdbc:mysql://192.168.99.100:33306/grafana?useSSL=false
+    username: grafana
+    password: grafana
+    driverClassName: com.mysql.jdbc.Driver
+  jpa:
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQL5Dialect
+        hbm2ddl.auto: update
 
 logging:
   level:
     org.influxdb: DEBUG
     
 management:
-  security:
-    enabled: false   
+  metrics:
+    export:
+      influx:
+        db: grafana
+        uri: http://192.168.99.100:8086
+    web.server.auto-time-requests: true
+  endpoints.web.exposure.include: '*'
