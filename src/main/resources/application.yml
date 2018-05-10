@@ -20,6 +20,7 @@ logging:
     org.influxdb: DEBUG
     
 management:
+  endpoint.prometheus.enabled: true
   metrics:
     export:
       influx:

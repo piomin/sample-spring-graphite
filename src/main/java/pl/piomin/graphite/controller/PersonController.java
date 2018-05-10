@@ -24,43 +24,41 @@ public class PersonController {
 
 	@Autowired
 	PersonRepository repository;
-	
+
 	@GetMapping("/persons/pesel/{pesel}")
 	public List<Person> findByPesel(@PathVariable("pesel") String pesel) {
 		logger.info(String.format("Person.findByPesel(%s)", pesel));
 		return repository.findByPesel(pesel);
 	}
-	
+
 	@GetMapping("/persons/{id}")
 	public Person findById(@PathVariable("id") Integer id) {
 		logger.info(String.format("Person.findById(%d)", id));
 		return repository.findById(id).get();
 	}
-	
+
 	@GetMapping("/persons")
-	@Timed(histogram = true, extraTags = {"get"})
 	public List<Person> findAll() {
 		logger.info(String.format("Person.findAll()"));
 		return (List<Person>) repository.findAll();
 	}
-	
+
 	@PostMapping("/persons")
-	@Timed(histogram = true, extraTags = {"add"})
 	public Person add(@RequestBody Person person) {
 		logger.info(String.format("Person.add(%s)", person));
 		return repository.save(person);
 	}
-	
-	@PutMapping("/persons/update")
+
+	@PutMapping("/persons")
 	public Person update(@RequestBody Person person) {
 		logger.info(String.format("Person.update(%s)", person));
 		return repository.save(person);
 	}
-	
-	@DeleteMapping("/persons/remove/{id}")
+
+	@DeleteMapping("/persons/{id}")
 	public void remove(@PathVariable("id") Integer id) {
 		logger.info(String.format("Person.remove(%d)", id));
 		repository.deleteById(id);
 	}
-	
+
 }
