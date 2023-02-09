@@ -18,7 +18,7 @@ public class FirstService {
 
     public void exampleMethod() {
     	Random r = new Random();
-    	for (int i = 0; i < 1000000; i++) {
+    	for (int i = 0; i < 1000; i++) {
     		this.gaugeService.submit("firstservice", r.nextDouble()*100);
     		try {
 				Thread.sleep(100);
