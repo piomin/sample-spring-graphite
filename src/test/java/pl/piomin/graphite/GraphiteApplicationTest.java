@@ -61,10 +61,10 @@ public class GraphiteApplicationTest {
 			}
 		}
 		
-		try {
-			Thread.sleep(500000);
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		}
+//		try {
+//			Thread.sleep(500000);
+//		} catch (InterruptedException e) {
+//			e.printStackTrace();
+//		}
 	}
 }
