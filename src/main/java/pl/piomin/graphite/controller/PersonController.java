@@ -32,7 +32,7 @@ public class PersonController {
 	@GetMapping("/persons/{id}")
 	public Person findById(@PathVariable("id") Integer id) {
 		logger.info(String.format("Person.findById(%d)", id));
-		return repository.findOne(id);
+		return repository.findById(id).orElseThrow();
 	}
 	
 	@GetMapping("/persons")
@@ -56,7 +56,7 @@ public class PersonController {
 	@DeleteMapping("/persons/remove/{id}")
 	public void remove(@PathVariable("id") Integer id) {
 		logger.info(String.format("Person.remove(%d)", id));
-		repository.delete(id);
+		repository.deleteById(id);
 	}
 	
 }

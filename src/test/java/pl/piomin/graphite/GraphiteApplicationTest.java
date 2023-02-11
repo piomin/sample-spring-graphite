@@ -4,16 +4,43 @@ import java.text.DecimalFormat;
 import java.util.Random;
 import java.util.logging.Logger;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 
+import org.springframework.test.context.DynamicPropertyRegistry;
+import org.springframework.test.context.DynamicPropertySource;
+import org.testcontainers.containers.GenericContainer;
+import org.testcontainers.containers.MySQLContainer;
+import org.testcontainers.junit.jupiter.Container;
+import org.testcontainers.junit.jupiter.Testcontainers;
 import pl.piomin.graphite.service.model.Person;
 
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@Testcontainers
 public class GraphiteApplicationTest {
 
 	protected Logger logger = Logger.getLogger(GraphiteApplicationTest.class.getName());
 
-	TestRestTemplate template = new TestRestTemplate();
+	@Container
+	private static final MySQLContainer MYSQL = new MySQLContainer()
+			.withUsername("datagrid")
+			.withPassword("datagrid");
+
+	@Container
+	private static final GenericContainer INFLUXDB = new GenericContainer("influxdb:2.5.1")
+			.withExposedPorts(8086);
+
+	@DynamicPropertySource
+	static void mysqlProperties(DynamicPropertyRegistry registry) {
+		registry.add("spring.datasource.url", MYSQL::getJdbcUrl);
+		String influxUri = "http://localhost:" + INFLUXDB.getFirstMappedPort();
+		registry.add("management.metrics.export.influx.uri", () -> influxUri);
+	}
+
+	@Autowired
+	TestRestTemplate template;
 	Random r = new Random();
 	
 	@Test
@@ -31,17 +58,17 @@ public class GraphiteApplicationTest {
 							p.setLastName("Testowy" + ix);
 							p.setPesel(new DecimalFormat("0000000").format(ix) + new DecimalFormat("000").format(ix%100));
 							p.setAge(ix%100);
-							p = template.postForObject("http://localhost:2222/persons", p, Person.class);
+							p = template.postForObject("/persons", p, Person.class);
 							logger.info(String.format("New person: %s", p));
 							
 							int ix2 = new Random().nextInt(100000);
-							p = template.getForObject("http://localhost:2222/persons/{id}", Person.class, ix2);
+							p = template.getForObject("/persons/{id}", Person.class, ix2);
 							p.setAge(ix%100);
-							template.put("http://localhost:2222/persons/update", p);
+							template.put("/persons/update", p);
 							logger.info(String.format("Person updated: %s with age=%d", p, ix%100));
 							
 							int ix3 = new Random().nextInt(100000);
-							template.delete("http://localhost:2222/persons/remove/{id}", ix3);
+							template.delete("/persons/remove/{id}", ix3);
 						} catch (Exception e) {
 							
 						}

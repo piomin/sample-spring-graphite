@@ -22,4 +22,8 @@ logging:
     
 management:
   security:
-    enabled: false   
+    enabled: false
+  metrics.export.influx:
+    db: grafana
+    uri: http://localhost:8086
+    step: 1m
