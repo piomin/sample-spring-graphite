@@ -15,12 +15,26 @@ spring:
     export:
       delay-millis: 5000
       includes: heap.used,heap.committed,mem,mem.free,threads,datasource.primary.active,datasource.primary.usage,gauge.response.persons,gauge.response.persons.id,gauge.response.persons.remove,gauge.firstservice
+  jpa:
+    hibernate:
+      ddl-auto: create
+  influx:
+    url: http://localhost:8086
+    user: test
+    password: test
+
 
 logging:
   level:
     org.influxdb: DEBUG
     
 management:
+  influx:
+    metrics:
+      export:
+        db: grafana
+        uri: http://localhost:8086
+        step: 1m
   security:
     enabled: false
   metrics.export.influx:

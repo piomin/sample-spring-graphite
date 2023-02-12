@@ -17,7 +17,6 @@ public class FirstService {
 	public FirstService(MeterRegistry meterRegistry) {
 
 		this.gauge = Gauge.builder("firstservice", () -> r())
-				.tags("test")
 				.register(meterRegistry);
 	}
 

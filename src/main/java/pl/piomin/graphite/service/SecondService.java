@@ -12,7 +12,7 @@ public class SecondService {
 	private Counter counter;
 
 	public SecondService(MeterRegistry meterRegistry) {
-		counter = meterRegistry.counter("hello3", "hello");
+		counter = meterRegistry.counter("hello3");
 	}
 
 	public void exampleMethod() {
