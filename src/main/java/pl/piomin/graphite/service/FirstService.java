@@ -1,5 +1,7 @@
 package pl.piomin.graphite.service;
 
+import io.micrometer.core.instrument.Gauge;
+import io.micrometer.core.instrument.MeterRegistry;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -8,18 +10,20 @@ import java.util.Random;
 @Service
 public class FirstService {
 
-	// TODO - fixme
-//    private final GaugeService gaugeService;
+	private Gauge gauge;
+	private double t = 0;
+	Random r = new Random();
 
-    @Autowired
-//    public FirstService(GaugeService gaugeService) {
-//        this.gaugeService = gaugeService;
-//    }
+	public FirstService(MeterRegistry meterRegistry) {
 
-    public void exampleMethod() {
+		this.gauge = Gauge.builder("firstservice", () -> r())
+				.register(meterRegistry);
+	}
+
+	public void exampleMethod() {
     	Random r = new Random();
     	for (int i = 0; i < 1000; i++) {
-//    		this.gaugeService.submit("firstservice", r.nextDouble()*100);
+			r();
     		try {
 				Thread.sleep(100);
 			} catch (InterruptedException e) {
@@ -27,5 +31,9 @@ public class FirstService {
 			}
 		}
     }
+
+	private double r() {
+		return r.nextDouble();
+	}
 
 }
