@@ -1,7 +1,7 @@
 version: 2.1
 
 executors:
-  linux:
+  vm:
     machine:
       image: ubuntu-2204:current
     environment:
@@ -15,4 +15,4 @@ workflows:
   maven_test:
     jobs:
       - maven/test:
-          executor: linux
+          executor: vm

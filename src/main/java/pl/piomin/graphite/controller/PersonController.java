@@ -24,13 +24,13 @@ public class PersonController {
 	PersonRepository repository;
 	
 	@GetMapping("/persons/pesel/{pesel}")
-	public List<Person> findByPesel(@PathVariable("pesel") String pesel) {
+	public List<Person> findByPesel(@PathVariable String pesel) {
 		logger.info(String.format("Person.findByPesel(%s)", pesel));
 		return repository.findByPesel(pesel);
 	}
 	
 	@GetMapping("/persons/{id}")
-	public Person findById(@PathVariable("id") Integer id) {
+	public Person findById(@PathVariable Integer id) {
 		logger.info(String.format("Person.findById(%d)", id));
 		return repository.findById(id).orElseThrow();
 	}
@@ -54,7 +54,7 @@ public class PersonController {
 	}
 	
 	@DeleteMapping("/persons/remove/{id}")
-	public void remove(@PathVariable("id") Integer id) {
+	public void remove(@PathVariable Integer id) {
 		logger.info(String.format("Person.remove(%d)", id));
 		repository.deleteById(id);
 	}
