@@ -1,9 +1,5 @@
 package pl.piomin.graphite;
 
-import java.text.DecimalFormat;
-import java.util.Random;
-
-import io.micrometer.core.instrument.MeterRegistry;
 import org.influxdb.InfluxDB;
 import org.influxdb.InfluxDBFactory;
 import org.influxdb.dto.Query;
@@ -12,9 +8,10 @@ import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.resttestclient.TestRestTemplate;
+import org.springframework.boot.resttestclient.autoconfigure.AutoConfigureTestRestTemplate;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.web.client.TestRestTemplate;
-
+import org.springframework.boot.testcontainers.service.connection.ServiceConnection;
 import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
 import org.testcontainers.containers.GenericContainer;
@@ -23,13 +20,18 @@ import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
 import pl.piomin.graphite.service.model.Person;
 
+import java.text.DecimalFormat;
+import java.util.Random;
+
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @Testcontainers
+@AutoConfigureTestRestTemplate
 public class GraphiteApplicationTest {
 
 	protected final Logger LOGGER = LoggerFactory.getLogger(GraphiteApplicationTest.class);
 
 	@Container
+	@ServiceConnection
 	private static final MySQLContainer MYSQL = new MySQLContainer()
 			.withUsername("datagrid")
 			.withPassword("datagrid");
@@ -42,7 +44,7 @@ public class GraphiteApplicationTest {
 
 	@DynamicPropertySource
 	static void mysqlProperties(DynamicPropertyRegistry registry) {
-		registry.add("spring.datasource.url", MYSQL::getJdbcUrl);
+//		registry.add("spring.datasource.url", MYSQL::getJdbcUrl);
 		String influxUri = "http://localhost:" + INFLUXDB.getFirstMappedPort();
 		registry.add("management.metrics.export.influx.uri", () -> influxUri);
 	}
@@ -74,7 +76,7 @@ public class GraphiteApplicationTest {
 
 			}
 			try {
-				Thread.sleep(1000);
+				Thread.sleep(100);
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			};
